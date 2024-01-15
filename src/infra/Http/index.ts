@@ -1,3 +1,4 @@
+import { IreqParams } from "../../domain/shared/interfaces/reqparams.interface";
 import { Repository } from "../repository/Interface/Irepository";
 
 export class Http {
@@ -10,10 +11,12 @@ export class Http {
         this.storageCache = storageCache;
     }
 
-    async get(params: Object){
-        const urlWithParams = new URL(this.url)
+    async get(reqParams: IreqParams){
+        const urlWithParams = reqParams.pathParam ? new URL(this.url+reqParams.path+reqParams.pathParam) : new URL(this.url+reqParams.path)
+        const {searchParams} = reqParams
+
         //@ts-ignore
-        Object.keys(params).forEach(key => urlWithParams.searchParams.append(key,params[key]))
+        Object.keys(searchParams).forEach(key => urlWithParams.searchParams.append(key,searchParams[key]))
         
         if(this.storageCache.find(urlWithParams.toString()) !== null){
             return this.storageCache.find(urlWithParams.toString())
@@ -24,8 +27,8 @@ export class Http {
         return resJSON
     }
 
-    async post(body:Object){
-        return await fetch(this.url,{
+    async post(path:string,body:Object){
+        return await fetch(this.url+path,{
             method:'POST',
             headers: {
                 'Content-Type':'application/json'
