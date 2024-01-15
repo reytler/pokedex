@@ -11,7 +11,7 @@ export class Pokemon{
     async getPokemons(limit:number,offset:number){
         const res: Iresponse = {} as Iresponse
         try {
-            res.data = await this.http.getWithParams({limit: limit,offset: offset})
+            res.data = await this.http.get({limit: limit,offset: offset})
             res.error = null
             return res        
         } catch (error) {
@@ -23,7 +23,7 @@ export class Pokemon{
     async findPokemons(name: string){
         const res: Iresponse = {} as Iresponse
         try {
-            res.data = await this.http.getWithParams({name: name})
+            res.data = await this.http.get({name: name})
             res.error = null
             return res        
         } catch (error) {

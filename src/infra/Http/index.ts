@@ -10,16 +10,7 @@ export class Http {
         this.storageCache = storageCache;
     }
 
-    async get(){
-        if(this.storageCache.find() !== null){
-            return this.storageCache.find(this.url)
-        }
-        const res = await fetch(this.url,this.config)
-        this.storageCache.create(res,this.url)
-        return res
-    }
-
-    async getWithParams(params: Object){
+    async get(params: Object){
         const urlWithParams = new URL(this.url)
         //@ts-ignore
         Object.keys(params).forEach(key => urlWithParams.searchParams.append(key,params[key]))
