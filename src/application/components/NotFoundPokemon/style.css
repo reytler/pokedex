@@ -1,0 +1,10 @@
+.wrapperNotFoundPokemon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 99.5vh;
+}
+
+.titleNotFoundPokemon{
+    color: white;
+}

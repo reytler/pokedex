@@ -1,31 +1,37 @@
-import { useCallback, useEffect } from "react"
-import { Pokemon } from "../../domain/pokemon/Pokemon"
-import { Http } from "../../infra/Http"
-import { LocalStorage } from "../../infra/repository/localStorage"
+import { useCallback, useEffect, useState } from "react"
+import { useDomainPokemon } from "../../domain/pokemon"
+import { IPokemon } from "../../domain/pokemon/pokemon.model"
+import { GridView } from "../components/GridView"
+
+enum View {
+    Grid,
+    Mono
+}
 
 export function Pokemons(){
-    const storageCache = new LocalStorage(2)
-    const http = new Http('https://pokeapi.co/api/v2',{},storageCache)
-    const pokemons = new Pokemon(http)
+    const {getAll} = useDomainPokemon()
+    const [pokemons,setPokemons] = useState<IPokemon[]>()
+    const [limit,setLimit] = useState<number>(5)
+    const [offset,setOffset] = useState<number>(0)
+    const [view,setview] = useState<View>(View.Grid)
 
-    
-
-    const load = useCallback(async ()=>{
-        const res = await pokemons.getPokemons(20,0)
-        console.log('Res: ',res)
-    },[pokemons])
-
-    const loadOne = useCallback(async ()=>{
-        const res = await pokemons.findPokemon('1')
-        console.log('ResOne: ',res)
-    },[pokemons])
+    const loadPokemons = useCallback(async (limit:number, offset: number)=>{
+        const res = await getAll(limit,offset)
+        setPokemons(res?.data.results)
+    },[])
 
     useEffect(()=>{
-        load()
-        loadOne()
-    },[load])
+        loadPokemons(limit,offset)
+    },[limit,offset])
 
     return(
-        <h1>Pokemons</h1>
+        <>
+            {view === View.Grid 
+            ? (
+                <GridView pokemons={pokemons}/>
+            ) 
+            : null
+            }
+        </>
     )
 }
