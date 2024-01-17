@@ -1,5 +1,6 @@
 .warpperGridView{
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 9px;
     margin: 0px 15px 0px 15px;

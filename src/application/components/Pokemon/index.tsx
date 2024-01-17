@@ -25,13 +25,13 @@ export function Pokemon({pokemon}:propsPokemon){
     },[pokemon])
 
     if(loading){
-        return(<h1>Loading...</h1>)
+        return(<h1 style={{color:'white',fontWeight:'bold'}}>Loading...</h1>)
     }
     
     return(
         <div className="cardPokemon">
             <h1 className="titlePokemon">{pokemon.name}</h1>
-            {dataPokemon?.sprites && (<SpritesCarrossel sprites={dataPokemon?.sprites}/>)}
+            {dataPokemon?.sprites && <SpritesCarrossel sprites={dataPokemon?.sprites}/>}
         </div>
     )
 }

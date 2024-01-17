@@ -1,0 +1,32 @@
+.btnTransition{
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer
+}
+
+.wrapperCarrossel{
+    display: flex;
+}
+
+.wrapperprogress{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: end;
+}
+
+.progressCarrossel{
+    display: flex; 
+    gap: 5px; 
+    justify-content: center; 
+    height: 10px;
+}
+
+.itemProgress{
+    width: 15px;
+    height: 10px; 
+    border-radius: 10px;
+}
