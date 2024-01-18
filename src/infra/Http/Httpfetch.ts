@@ -1,7 +1,8 @@
 import { IreqParams } from "../../domain/shared/interfaces/reqparams.interface";
 import { Repository } from "../repository/Interface/Irepository";
+import { Ihttp } from "./interface/Ihttp";
 
-export class Http {
+export class Httpfetch implements Ihttp{
     private url: string
     private config: Object;
     private storageCache: Repository;

@@ -1,10 +1,10 @@
-import { Http } from "../../infra/Http";
+import { Ihttp } from "../../infra/Http/interface/Ihttp";
 import { Iresponse } from "../shared/interfaces/reponse.interface";
 import { IreqParams } from "../shared/interfaces/reqparams.interface";
 
 export class Pokemon{
-    private http: Http;
-    constructor(http: Http){
+    private http: Ihttp;
+    constructor(http: Ihttp){
         this.http = http
     }
 
