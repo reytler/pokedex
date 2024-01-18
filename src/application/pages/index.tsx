@@ -46,15 +46,17 @@ export function Pokemons(){
         setCont(res?.data.count)
         setPokemons(onderPokemons(res?.data.results,order))
         setLoading(false)
-    },[])
+    },[getAll])
 
     useEffect(()=>{
         loadPokemons(limit,offset,order)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[limit,offset,order])
 
     useEffect(()=>{
         if(view === View.Mono){
             setLimit(1)
+            setOrder(Order.Sort)
         }
         if(view === View.Grid){
             setLimit(5)
@@ -88,7 +90,9 @@ export function Pokemons(){
         }
 
         if(transition === Transition.Prev){
-            setOffset(prev=>prev-limit)
+            if(offset >= limit){
+                setOffset(prev=>prev-limit)
+            }
             if(page > 1){
                 setPage(prev=>prev-1)
             }

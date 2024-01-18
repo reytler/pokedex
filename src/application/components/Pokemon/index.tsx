@@ -21,10 +21,11 @@ export function Pokemon({pokemon,heigth, width}:propsPokemon){
         const res = await getOne(name)
         setDataPokemon(res?.data)
         setLoading(false)
-    },[])
+    },[getOne])
 
     useEffect(()=>{
         load(pokemon.name)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[pokemon])
 
     if(loading){
