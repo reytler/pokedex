@@ -127,6 +127,8 @@ export function Pokemons(){
                             <option value="10">10</option>
                             <option value="15">15</option>
                             <option value="20">20</option>
+                            <option value="200">100</option>
+                            <option value="200">200</option>
                         </select>
                         <label htmlFor="order" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Ordem:</label>                
                         <select name="limit" id="limit" onChange={(event)=>handleSetorder(event.target.value)}>
