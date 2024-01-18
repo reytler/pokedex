@@ -3,6 +3,7 @@ import { Isprites } from "../../../domain/pokemon/dataPokemon.model"
 import './style.css'
 interface IpropsSpritesCarrossel {
     sprites: Isprites
+    pixels: number
 }
 
 enum enumTransition {
@@ -10,7 +11,7 @@ enum enumTransition {
     prev
 }
 
-export function SpritesCarrossel({sprites}:IpropsSpritesCarrossel){
+export function SpritesCarrossel({sprites,pixels}:IpropsSpritesCarrossel){
     const [idx,setIdx] = useState<number>(0)
 
     delete sprites.other
@@ -43,7 +44,7 @@ export function SpritesCarrossel({sprites}:IpropsSpritesCarrossel){
                     title="Imagem Anterior"
                     onClick={()=>handleTransition(enumTransition.prev)}
                 >Anterior</button>
-                <img src={arraySprites[idx]} key={arraySprites[idx]} alt="Imagem do pokemon"/>
+                <img src={arraySprites[idx]} key={arraySprites[idx]} alt="Imagem do pokemon" width={pixels} height={pixels}/>
                 <button 
                     className="btnTransition"
                     title="Próxima Imagem"

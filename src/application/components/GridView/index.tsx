@@ -15,7 +15,7 @@ export function GridView({pokemons}:GridviewProps){
     return(
         <div className="warpperGridView">
             {pokemons?.map((pokemon:IPokemon)=>(
-                <Pokemon pokemon={pokemon} key={pokemon.url}/>
+                <Pokemon pokemon={pokemon} key={pokemon.url} heigth={300} width={300}/>
             ))}
         </div>
     )

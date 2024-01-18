@@ -6,9 +6,11 @@ import { IDataPokemon } from "../../../domain/pokemon/dataPokemon.model"
 import { SpritesCarrossel } from "../SpritesCarrossel"
 interface propsPokemon {
     pokemon: IPokemon
+    width: number
+    heigth: number
 }
 
-export function Pokemon({pokemon}:propsPokemon){
+export function Pokemon({pokemon,heigth, width}:propsPokemon){
     const {getOne} = useDomainPokemon()
     const [dataPokemon,setDataPokemon] = useState<IDataPokemon>()
     const [loading,setLoading] = useState<boolean>(false)
@@ -29,9 +31,9 @@ export function Pokemon({pokemon}:propsPokemon){
     }
     
     return(
-        <div className="cardPokemon">
+        <div className="cardPokemon" style={{width: width, height: heigth}}>
             <h1 className="titlePokemon">{pokemon.name}</h1>
-            {dataPokemon?.sprites && <SpritesCarrossel sprites={dataPokemon?.sprites}/>}
+            {dataPokemon?.sprites && <SpritesCarrossel sprites={dataPokemon?.sprites} pixels={width <= 300 ? 96 : 250}/>}
         </div>
     )
 }
