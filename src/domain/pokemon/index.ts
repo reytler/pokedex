@@ -1,9 +1,9 @@
 import { Http } from "../../infra/Http"
-import { LocalStorage } from "../../infra/repository/localStorage"
+import { RamStorage } from "../../infra/repository/ramCache"
 import { Pokemon } from "./Pokemon"
 
 export const URL = 'https://pokeapi.co/api/v2'
-const storageCache = new LocalStorage(2)
+const storageCache = new RamStorage(2)
 const http = new Http(URL,{},storageCache)
 const pokemons = new Pokemon(http)
 
