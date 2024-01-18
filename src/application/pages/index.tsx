@@ -4,6 +4,7 @@ import { IPokemon } from "../../domain/pokemon/pokemon.model"
 import { GridView } from "../components/GridView"
 import { IconRefresh } from "../components/IconRefresh"
 import { Pokemon } from "../components/Pokemon"
+import { Loader } from "../components/Loader"
 
 enum View {
     Grid,
@@ -26,8 +27,9 @@ export function Pokemons(){
     const [offset,setOffset] = useState<number>(0)
     const [view,setview] = useState<View>(View.Grid)
     const [order,setOrder] = useState<Order>(Order.Sort)
-    const [count,setCont] = useState(0)
-    const [page,setPage] = useState(1)
+    const [count,setCont] = useState<number>(0)
+    const [page,setPage] = useState<number>(1)
+    const [loading,setLoading] = useState<boolean>(false)
 
     console.log('PAGE: ',page)
 
@@ -39,9 +41,11 @@ export function Pokemons(){
     }
 
     const loadPokemons = useCallback(async (limit:number, offset: number, order: Order)=>{
+        setLoading(true)
         const res = await getAll(limit,offset)
         setCont(res?.data.count)
         setPokemons(onderPokemons(res?.data.results,order))
+        setLoading(false)
     },[])
 
     useEffect(()=>{
@@ -127,7 +131,7 @@ export function Pokemons(){
                             <option value="10">10</option>
                             <option value="15">15</option>
                             <option value="20">20</option>
-                            <option value="200">100</option>
+                            <option value="100">100</option>
                             <option value="200">200</option>
                         </select>
                         <label htmlFor="order" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Ordem:</label>                
@@ -139,13 +143,24 @@ export function Pokemons(){
                     </div>
                 )
             }
-                
             
-            {view === View.Grid 
+            {loading && (
+                <div style={{
+                    width:'99.8vw', 
+                    height:'80vh', 
+                    display:'flex', 
+                    justifyContent:'center', 
+                    alignItems:'center'
+                }}>
+                    <Loader/>
+                </div>
+            )}
+            
+            {view === View.Grid && !loading
             ? (
                 <GridView pokemons={pokemons}/>
             ) 
-            : pokemons && (
+            : pokemons && !loading && (
                 <div 
                 style={{
                     display:'flex', 
