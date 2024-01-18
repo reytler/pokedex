@@ -4,6 +4,7 @@ import { IPokemon } from "../../../domain/pokemon/pokemon.model"
 import './style.css'
 import { IDataPokemon } from "../../../domain/pokemon/dataPokemon.model"
 import { SpritesCarrossel } from "../SpritesCarrossel"
+import { Loader } from "../Loader"
 interface propsPokemon {
     pokemon: IPokemon
     width: number
@@ -27,7 +28,16 @@ export function Pokemon({pokemon,heigth, width}:propsPokemon){
     },[pokemon])
 
     if(loading){
-        return(<h1 style={{color:'white',fontWeight:'bold'}}>Loading...</h1>)
+        return(
+            <div className="cardPokemon" style={{
+                    width: width, 
+                    height: heigth,
+                    display:'flex', 
+                    justifyContent:'center'
+                }}>
+                <Loader/>
+            </div>
+        )
     }
     
     return(
