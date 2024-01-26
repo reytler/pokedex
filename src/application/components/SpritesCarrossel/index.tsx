@@ -44,7 +44,7 @@ export function SpritesCarrossel({sprites,pixels}:IpropsSpritesCarrossel){
                     title="Imagem Anterior"
                     onClick={()=>handleTransition(enumTransition.prev)}
                 >Anterior</button>
-                <img src={arraySprites[idx]} key={arraySprites[idx]} alt="Imagem do pokemon" width={pixels} height={pixels}/>
+                <img src={arraySprites[idx]} key={arraySprites[idx]} alt={`${arraySprites[idx]}`} width={pixels} height={pixels}/>
                 <button 
                     className="btnTransition"
                     title="Próxima Imagem"
@@ -54,7 +54,7 @@ export function SpritesCarrossel({sprites,pixels}:IpropsSpritesCarrossel){
             <div className="wrapperprogress">
                 <div className="progressCarrossel" >
                     {arraySprites.map((sprt,_idx)=>(
-                        <div 
+                        <div
                             style={{background: _idx === idx ? '#61dafb' : 'black'}}
                             key={_idx} 
                             className="itemProgress"

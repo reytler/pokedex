@@ -31,7 +31,6 @@ export function Pokemons(){
     const [page,setPage] = useState<number>(1)
     const [loading,setLoading] = useState<boolean>(false)
 
-    console.log('PAGE: ',page)
 
     function onderPokemons(pokemons:Array<IPokemon>,order:Order): Array<IPokemon> {
         if(order === Order.Sort){
@@ -162,7 +161,11 @@ export function Pokemons(){
             
             {view === View.Grid && !loading
             ? (
-                <GridView pokemons={pokemons}/>
+                <GridView pokemons={pokemons}>
+                    {pokemons?.map((pokemon:IPokemon)=>(
+                        <Pokemon pokemon={pokemon} key={pokemon.url} heigth={300} width={300}/>
+                    ))}
+                </GridView>
             ) 
             : pokemons && !loading && (
                 <div 
