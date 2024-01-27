@@ -16,8 +16,7 @@ export class Httpfetch implements Ihttp{
         const urlWithParams = reqParams.pathParam ? new URL(this.url+reqParams.path+reqParams.pathParam) : new URL(this.url+reqParams.path)
         const {searchParams} = reqParams
 
-        //@ts-ignore
-        Object.keys(searchParams).forEach(key => urlWithParams.searchParams.append(key,searchParams[key]))
+        Object.keys(searchParams).forEach(key => urlWithParams.searchParams.append(key,searchParams[key].toString()))
         
         if(this.storageCache.find(urlWithParams.toString()) !== null){
             return this.storageCache.find(urlWithParams.toString())

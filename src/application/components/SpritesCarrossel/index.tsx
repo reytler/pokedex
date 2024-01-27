@@ -18,7 +18,6 @@ export function SpritesCarrossel({sprites,pixels}:IpropsSpritesCarrossel){
     delete sprites.versions
     let arraySprites: string[] = [] 
 
-    //@ts-ignore
     Object.keys(sprites).forEach((key)=>arraySprites.push(sprites[key]))
     arraySprites = arraySprites.filter(sprite=>sprite !== null)
 

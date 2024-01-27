@@ -6,6 +6,5 @@ export interface IreqParams {
 }
 
 interface searchParams {
-    limit?: number
-    offset?: number
+    [key: string]: number
 }

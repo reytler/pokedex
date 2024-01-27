@@ -9,7 +9,7 @@ interface GridviewProps {
 
 export function GridView({children,pokemons}:GridviewProps){
 
-    if(pokemons !== undefined && pokemons.length < 1){
+    if(pokemons && pokemons.length < 1){
         return(<NotFoundPokemon/>)
     }
     return(

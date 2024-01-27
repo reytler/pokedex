@@ -23,8 +23,8 @@ export class LocalStorage implements Repository{
     }
     
     private isExpired(key:string){
-        let whenCached = localStorage.getItem(key + ':ts')
-        let age = (parseInt(`${whenCached}`))
+        const whenCached = localStorage.getItem(key + ':ts')
+        const age = (parseInt(`${whenCached}`))
         if (age < Date.now()) {
             this.delete(key);
             return true;
