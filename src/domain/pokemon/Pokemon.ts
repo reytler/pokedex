@@ -17,10 +17,11 @@ export class Pokemon{
         try {
             res.data = await this.http.get(reqParams)
             res.error = null
-            return res        
         } catch (error) {
             res.data = null
-            res.error = error
+            res.error = error            
+        }finally{
+            return res
         }
     }
 
@@ -34,10 +35,11 @@ export class Pokemon{
         try {
             res.data = await this.http.get(reqParams)
             res.error = null
-            return res        
         } catch (error) {
             res.data = null
             res.error = error
+        }finally{
+            return res
         }
     }
 

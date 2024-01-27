@@ -19,7 +19,7 @@ export interface IDataPokemon {
     weight: number
 }
 
-interface Iform {
+export interface Iform {
     name: string
     url: string
 }
