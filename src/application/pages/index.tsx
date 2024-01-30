@@ -5,6 +5,7 @@ import { GridView } from "../components/GridView"
 import { IconRefresh } from "../components/IconRefresh"
 import { Pokemon } from "../components/Pokemon"
 import { Loader } from "../components/Loader"
+import { useLocalStorage } from "../hooks/useLocalStorage"
 
 enum View {
     Grid,
@@ -23,14 +24,14 @@ enum Transition {
 export function Pokemons(){
     const {getAll} = useDomainPokemon()
     const [pokemons,setPokemons] = useState<IPokemon[]>()
-    const [limit,setLimit] = useState<number>(5)
-    const [offset,setOffset] = useState<number>(0)
-    const [view,setview] = useState<View>(View.Grid)
-    const [order,setOrder] = useState<Order>(Order.Sort)
+    const [limit,setLimit] = useLocalStorage<number>("limit",5)
+    const [limitBeforeMonoView,setLimitBeforeMonoView] = useLocalStorage("limitBeforeMonoView",0)
+    const [offset,setOffset] = useLocalStorage<number>("offset",0)
+    const [view,setview] = useLocalStorage<View>("view",View.Grid)
+    const [order,setOrder] = useLocalStorage<Order>("order",Order.Sort)
     const [count,setCont] = useState<number>(0)
-    const [page,setPage] = useState<number>(1)
+    const [page,setPage] = useLocalStorage<number>("page",1)
     const [loading,setLoading] = useState<boolean>(false)
-
 
     function onderPokemons(pokemons:Array<IPokemon>,order:Order): Array<IPokemon> {
         if(order === Order.Sort){
@@ -40,11 +41,11 @@ export function Pokemons(){
     }
 
     const loadPokemons = useCallback(async (limit:number, offset: number, order: Order)=>{
-        setLoading(true)
-        const res = await getAll(limit,offset)
-        setCont(res?.data.count)
-        setPokemons(onderPokemons(res?.data.results,order))
-        setLoading(false)
+            setLoading(true)
+            const res = await getAll(limit,offset)
+            setCont(res?.data.count)
+            setPokemons(onderPokemons(res?.data.results,order))
+            setLoading(false)
     },[getAll])
 
     useEffect(()=>{
@@ -54,11 +55,14 @@ export function Pokemons(){
 
     useEffect(()=>{
         if(view === View.Mono){
+            setLimitBeforeMonoView(limit)
             setLimit(1)
-            setOrder(Order.Sort)
         }
         if(view === View.Grid){
-            setLimit(5)
+            if(limitBeforeMonoView > 0){
+                setLimit(limitBeforeMonoView)
+                setLimitBeforeMonoView(0)
+            }
         }
     },[view])
 
@@ -82,26 +86,27 @@ export function Pokemons(){
         pages = Math.ceil(pages)
 
         if(transition === Transition.Next){
-            setOffset(prev=>prev+limit)
+            setOffset((prev: number)=>{
+                if((prev+limit) <= count){
+                    return prev+limit
+                }
+
+                return prev
+            })
             if(page < pages){
-                setPage(prev=>prev+1)
+                setPage((prev: number)=>prev+1)
             }
         }
 
         if(transition === Transition.Prev){
             if(offset >= limit){
-                setOffset(prev=>prev-limit)
+                setOffset((prev: number)=>prev-limit)
             }
             if(page > 1){
-                setPage(prev=>prev-1)
+                setPage((prev: number)=>prev-1)
             }
         }
     }
-
-    useEffect(()=>{
-        setPage(1)
-        setOffset(0)
-    },[limit])
 
     return(
         <>
@@ -111,9 +116,9 @@ export function Pokemons(){
                 gap:'15px',
                 margin:'10px 0 0 0'
             }}>
-                <button style={{height:'20px'}} onClick={()=>pagination(Transition.Prev)}>Anterior</button>
-                <button style={{height:'20px'}} onClick={()=>setOffset(0)}>Início</button>
-                <button style={{height:'20px'}} onClick={()=>pagination(Transition.Next)}>Próximo</button>
+                <button style={{height:'20px'}} onClick={()=>pagination(Transition.Prev)} disabled={loading}>Anterior</button>
+                <button style={{height:'20px'}} onClick={()=>setOffset(0)} disabled={loading}>Início</button>
+                <button style={{height:'20px'}} onClick={()=>pagination(Transition.Next)} disabled={loading}>Próximo</button>
                 <select name="" id="" onChange={(event)=>handleSetview(event.target.value)}>
                     <option value={View.Grid}>Grid</option>
                     <option value={View.Mono}>Mono</option>
@@ -129,7 +134,7 @@ export function Pokemons(){
                         gap:'5px'
                     }}>
                         <label htmlFor="limit" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Limite:</label>
-                        <select name="limit" id="limit" onChange={(event)=>setLimit(parseInt(event.target.value))} value={limit}>
+                        <select name="limit" id="limit" onChange={(event)=>setLimit(parseInt(event.target.value))} defaultValue={limit} value={limit}>
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="15">15</option>
@@ -138,11 +143,11 @@ export function Pokemons(){
                             <option value="200">200</option>
                         </select>
                         <label htmlFor="order" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Ordem:</label>                
-                        <select name="limit" id="limit" onChange={(event)=>handleSetorder(event.target.value)}>
+                        <select name="limit" id="limit" onChange={(event)=>handleSetorder(event.target.value)} value={order}>
                             <option value={Order.Sort}>ASC</option>
                             <option value={Order.Reverse}>DESC</option>
                         </select>
-                        <button onClick={()=>loadPokemons(limit,offset,order)} title="Recarregar"><IconRefresh/></button>
+                        <button onClick={()=>loadPokemons(limit,offset,order)} title="Recarregar" disabled={loading}><IconRefresh/></button>
                     </div>
                 )
             }
