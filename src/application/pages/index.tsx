@@ -64,6 +64,7 @@ export function Pokemons(){
         if(modal){
             loadForSearch()
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[modal])
 
     useEffect(()=>{
