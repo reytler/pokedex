@@ -6,6 +6,9 @@ import { IconRefresh } from "../components/IconRefresh"
 import { Pokemon } from "../components/Pokemon"
 import { Loader } from "../components/Loader"
 import { useLocalStorage } from "../hooks/useLocalStorage"
+import { Modal } from "../components/Modal"
+import { IconSearch } from "../components/IconSearch"
+import { SearchPanel } from "../components/SearchPanel"
 
 enum View {
     Grid,
@@ -24,6 +27,7 @@ enum Transition {
 export function Pokemons(){
     const {getAll} = useDomainPokemon()
     const [pokemons,setPokemons] = useState<IPokemon[]>()
+    const [pokemonsForSearch,setPokemonsForSearch] = useState<IPokemon[]>()
     const [limit,setLimit] = useLocalStorage<number>("limit",5)
     const [limitBeforeMonoView,setLimitBeforeMonoView] = useLocalStorage("limitBeforeMonoView",0)
     const [offset,setOffset] = useLocalStorage<number>("offset",0)
@@ -32,6 +36,7 @@ export function Pokemons(){
     const [count,setCont] = useState<number>(0)
     const [page,setPage] = useLocalStorage<number>("page",1)
     const [loading,setLoading] = useState<boolean>(false)
+    const [modal,setModal] = useState<boolean>(false)
 
     function onderPokemons(pokemons:Array<IPokemon>,order:Order): Array<IPokemon> {
         if(order === Order.Sort){
@@ -47,6 +52,19 @@ export function Pokemons(){
             setPokemons(onderPokemons(res?.data.results,order))
             setLoading(false)
     },[getAll])
+
+    const loadForSearch = useCallback(async ()=>{
+        setLoading(true)
+        const res = await getAll(10000,0)
+        setPokemonsForSearch(res.data.results)
+        setLoading(false)
+    },[getAll])
+
+    useEffect(()=>{
+        if(modal){
+            loadForSearch()
+        }
+    },[modal])
 
     useEffect(()=>{
         loadPokemons(limit,offset,order)
@@ -64,6 +82,7 @@ export function Pokemons(){
                 setLimitBeforeMonoView(0)
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[view])
 
     function handleSetorder(value: string){
@@ -110,6 +129,14 @@ export function Pokemons(){
 
     return(
         <>
+            <Modal isOpen={modal} toogle={()=>setModal(prev=>!prev)}>
+                <SearchPanel 
+                    loading={loading} 
+                    pokemons={pokemonsForSearch} 
+                    setPokemons={setPokemons}
+                    setModal={setModal}
+                />
+            </Modal>
             <div style={{
                 display:'flex', 
                 justifyContent:'center',
@@ -129,25 +156,48 @@ export function Pokemons(){
                 view === View.Grid && (
                     <div style={{
                         display:'flex',
+                        flexDirection:'column',
                         justifyContent:'center',
-                        padding:'15px 0 15px 0',
-                        gap:'5px'
+                        alignContent:'center',
+                        alignItems:'center'
                     }}>
-                        <label htmlFor="limit" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Limite:</label>
-                        <select name="limit" id="limit" onChange={(event)=>setLimit(parseInt(event.target.value))} defaultValue={limit} value={limit}>
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="100">100</option>
-                            <option value="200">200</option>
-                        </select>
-                        <label htmlFor="order" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Ordem:</label>                
-                        <select name="limit" id="limit" onChange={(event)=>handleSetorder(event.target.value)} value={order}>
-                            <option value={Order.Sort}>ASC</option>
-                            <option value={Order.Reverse}>DESC</option>
-                        </select>
-                        <button onClick={()=>loadPokemons(limit,offset,order)} title="Recarregar" disabled={loading}><IconRefresh/></button>
+                        <div style={{
+                            display:'flex',
+                            justifyContent:'center',
+                            padding:'15px 0 15px 0',
+                            gap:'5px'
+                        }}>
+                            <label htmlFor="limit" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Limite:</label>
+                            <select name="limit" id="limit" onChange={(event)=>setLimit(parseInt(event.target.value))} defaultValue={limit} value={limit}>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                            </select>
+                            <label htmlFor="order" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Ordem:</label>                
+                            <select name="limit" id="limit" onChange={(event)=>handleSetorder(event.target.value)} value={order}>
+                                <option value={Order.Sort}>ASC</option>
+                                <option value={Order.Reverse}>DESC</option>
+                            </select>
+                            <button onClick={()=>loadPokemons(limit,offset,order)} title="Recarregar" disabled={loading}><IconRefresh/></button>
+                        </div>
+                        <div style={{
+                            width:'100%',
+                            display:'flex',
+                            justifyContent:'center'
+                        }}>
+                            <span 
+                                style={{
+                                    cursor:'pointer'
+                                }}
+                                title="Buscar por um pokemon"
+                                onClick={()=>setModal(prev=>!prev)}
+                            >
+                                <IconSearch/>
+                            </span>
+                        </div>
                     </div>
                 )
             }
