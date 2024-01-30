@@ -1,5 +1,5 @@
 import { Httpfetch } from "../../infra/Http/Httpfetch"
-import { RamStorage } from "../../infra/repository/ramCache"
+import { RamStorage } from "../../infra/repository/ramStorage"
 import { Pokemon } from "./Pokemon"
 
 export const URL = 'https://pokeapi.co/api/v2'

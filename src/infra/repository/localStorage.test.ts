@@ -1,7 +1,5 @@
 import { LocalStorage } from './localStorage';
 
-import 'jest-localstorage-mock';
-
 describe('LocalStorage', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -49,21 +47,21 @@ describe('LocalStorage', () => {
     });
   });
 
-  // describe('delete', () => {
-  //   it('should remove value and timestamp from localStorage', () => {
-  //     const localStorageInstance = new LocalStorage();
-  //     const key = 'keyToDelete';
-  //     const value = { data: 'example' };
+  describe('delete', () => {
+    it('should remove value and timestamp from localStorage', () => {
+      const localStorageInstance = new LocalStorage();
+      const key = 'keyToDelete';
+      const value = { data: 'example' };
 
-  //     localStorage.setItem(key, JSON.stringify(value));
-  //     localStorage.setItem(key + ':ts', JSON.stringify(Date.now() + 1000));
+      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(key + ':ts', JSON.stringify(Date.now() + 1000));
 
-  //     localStorageInstance.delete(key);
+      localStorageInstance.delete(key);
 
-  //     const storedValue = localStorage.getItem(key);
-  //     const storedTimestamp = localStorage.getItem(key + ':ts');
-  //     expect(storedValue).toBeNull();
-  //     expect(storedTimestamp).toBeNull();
-  //   });
-  // });
+      const storedValue = localStorage.getItem(key);
+      const storedTimestamp = localStorage.getItem(key + ':ts');
+      expect(storedValue).toBeUndefined()
+      expect(storedTimestamp).toBeUndefined();
+    });
+  });
 });

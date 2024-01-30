@@ -5,6 +5,6 @@ export interface IreqParams {
     body?: Object
 }
 
-interface searchParams {
+export interface searchParams {
     [key: string]: number
 }
