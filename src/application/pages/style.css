@@ -1,0 +1,15 @@
+.area-loader-home {
+    width: 99.8vw; 
+    height: 80vh;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.area-mono-view {
+    display: flex ;
+    justify-content: center; 
+    justify-items: center; 
+    height: 95vh;
+    margin: 15px 0 0 0;
+}

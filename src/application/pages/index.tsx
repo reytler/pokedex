@@ -2,25 +2,26 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDomainPokemon } from "../../domain/pokemon"
 import { IPokemon } from "../../domain/pokemon/pokemon.model"
 import { GridView } from "../components/GridView"
-import { IconRefresh } from "../components/IconRefresh"
 import { Pokemon } from "../components/Pokemon"
 import { Loader } from "../components/Loader"
 import { useLocalStorage } from "../hooks/useLocalStorage"
 import { Modal } from "../components/Modal"
-import { IconSearch } from "../components/IconSearch"
 import { SearchPanel } from "../components/SearchPanel"
 import { LocalStorage } from "../../infra/repository/localStorage"
+import { HeaderCommandButtons } from "../components/HeaderCommandButtons"
+import { FiltersGridPokemon } from "../components/FiltersGridPokemon"
+import './style.css'
 
-enum View {
+export enum View {
     Grid,
     Mono
 }
 
-enum Order {
+export enum Order {
     Sort,
     Reverse
 }
-enum Transition {
+export enum Transition {
     Prev,
     Next
 }
@@ -54,6 +55,10 @@ export function Pokemons(){
             setPokemons(onderPokemons(res?.data.results,order))
             setLoading(false)
     },[getAll])
+
+    function handleLoadPokemons(){
+        loadPokemons(limit,offset,order)
+    }
 
     const loadForSearch = useCallback(async ()=>{
         setLoading(true)
@@ -95,6 +100,7 @@ export function Pokemons(){
             setOrder(Order.Sort)
         }
     }
+
     function handleSetview(value: string){
         if(parseInt(value) === View.Grid){
             setview(View.Grid)
@@ -140,79 +146,26 @@ export function Pokemons(){
                     setModal={setModal}
                 />
             </Modal>
-            <div style={{
-                display:'flex', 
-                justifyContent:'center',
-                gap:'15px',
-                margin:'10px 0 0 0'
-            }}>
-                <button style={{height:'20px'}} onClick={()=>pagination(Transition.Prev)} disabled={loading}>Anterior</button>
-                <button style={{height:'20px'}} onClick={()=>setOffset(0)} disabled={loading}>Início</button>
-                <button style={{height:'20px'}} onClick={()=>pagination(Transition.Next)} disabled={loading}>Próximo</button>
-                <select name="" id="" onChange={(event)=>handleSetview(event.target.value)}>
-                    <option value={View.Grid}>Grid</option>
-                    <option value={View.Mono}>Mono</option>
-                </select>
-                { view === View.Mono && <button onClick={()=>loadPokemons(limit,offset,order)} title="Recarregar"><IconRefresh/></button>}
-            </div>
-            {
-                view === View.Grid && (
-                    <div style={{
-                        display:'flex',
-                        flexDirection:'column',
-                        justifyContent:'center',
-                        alignContent:'center',
-                        alignItems:'center'
-                    }}>
-                        <div style={{
-                            display:'flex',
-                            justifyContent:'center',
-                            padding:'15px 0 15px 0',
-                            gap:'5px'
-                        }}>
-                            <label htmlFor="limit" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Limite:</label>
-                            <select name="limit" id="limit" onChange={(event)=>setLimit(parseInt(event.target.value))} defaultValue={limit} value={limit}>
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="100">100</option>
-                                <option value="200">200</option>
-                            </select>
-                            <label htmlFor="order" style={{color:'white', fontWeight:'bold', margin:'0 5px 0 0'}}>Ordem:</label>                
-                            <select name="limit" id="limit" onChange={(event)=>handleSetorder(event.target.value)} value={order}>
-                                <option value={Order.Sort}>ASC</option>
-                                <option value={Order.Reverse}>DESC</option>
-                            </select>
-                            <button onClick={()=>loadPokemons(limit,offset,order)} title="Recarregar" disabled={loading}><IconRefresh/></button>
-                        </div>
-                        <div style={{
-                            width:'100%',
-                            display:'flex',
-                            justifyContent:'center'
-                        }}>
-                            <span 
-                                style={{
-                                    cursor:'pointer'
-                                }}
-                                title="Buscar por um pokemon"
-                                onClick={()=>setModal(prev=>!prev)}
-                            >
-                                <IconSearch/>
-                            </span>
-                        </div>
-                    </div>
-                )
-            }
-            
+            <HeaderCommandButtons 
+                handleLoadPokemons={handleLoadPokemons} 
+                handleSetview={handleSetview} 
+                loading={loading} 
+                pagination={pagination} 
+                setOffset={setOffset} 
+                view={view}
+            />
+            <FiltersGridPokemon 
+                handleLoadPokemons={handleLoadPokemons} 
+                handleSetLimit={(limit)=>setLimit(limit)}
+                handleSetorder={(order:string)=>handleSetorder(order)}
+                limit={limit}
+                loading={loading}
+                order={order}
+                toggleModal={()=>setModal(prev=>!prev)}
+                view={view}
+            />            
             {loading && (
-                <div style={{
-                    width:'99.8vw', 
-                    height:'80vh', 
-                    display:'flex', 
-                    justifyContent:'center', 
-                    alignItems:'center'
-                }}>
+                <div className="area-loader-home">
                     <Loader/>
                 </div>
             )}
@@ -226,14 +179,7 @@ export function Pokemons(){
                 </GridView>
             ) 
             : pokemons && !loading && (
-                <div 
-                style={{
-                    display:'flex', 
-                    justifyContent:'center', 
-                    justifyItems:'center', 
-                    height:'95vh',
-                    margin:'15px 0 0 0'
-                }}>
+                <div className="area-mono-view">
                     <Pokemon pokemon={pokemons[0]} heigth={600} width={600}/>
                 </div>
             )

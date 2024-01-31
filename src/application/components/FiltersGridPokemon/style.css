@@ -1,0 +1,29 @@
+.warpper-filter-grid {
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.area-filters-grid {
+    display:flex;
+    justify-content:center;
+    padding:15px 0 15px 0;
+    gap: 5px;
+}
+
+.label-filters-grid {
+    color: white;
+    font-weight: bold;
+    margin: 0 5px 0 0
+}
+
+.area-icon-search-grid {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    span {
+        cursor: pointer;
+    }
+}
