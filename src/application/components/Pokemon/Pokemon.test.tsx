@@ -74,7 +74,8 @@ describe("Pokemon Component",()=>{
 
         await waitFor(()=>{
             expect(screen.queryByTestId('loader')).toBeNull();
-            // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+        })
+        await waitFor(()=>{
             expect(screen.getByText("bulbasaur")).toBeInTheDocument();
         })
     })
@@ -84,7 +85,8 @@ describe("Pokemon Component",()=>{
 
         await waitFor(()=>{
             expect(screen.getByText("bulbasaur")).toBeInTheDocument();
-            // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+        })
+        await waitFor(()=>{
             expect(screen.getByTestId('sprites-carrossel')).toBeInTheDocument();
         })
     })
@@ -96,7 +98,6 @@ describe("Pokemon Component",()=>{
             await waitFor(() => {
                  expect(mockUseDomainPokemon().getOne).toHaveBeenCalledWith('bulbasaur');
              });
-
         });
     })
 })
