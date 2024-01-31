@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { LocalStorage } from "../../infra/repository/localStorage";
+import { useEffect, useState } from "react";
+import { Repository } from "../../infra/repository/Interface/Irepository";
 
-export function useLocalStorage<T>(key: string, fallbackValue: T){
-    const localStorageinstance = useMemo(()=>new LocalStorage(1000),[])
+export function useLocalStorage<T>(key: string, fallbackValue: T,storageInstance: Repository){
 
     const [state, setState] = useState(()=>{
-        const storeData = localStorageinstance.find(key)
+        const storeData = storageInstance.find(key)
         if(storeData){
             return storeData
         }
@@ -13,8 +12,8 @@ export function useLocalStorage<T>(key: string, fallbackValue: T){
     })
 
     useEffect(()=>{
-        localStorageinstance.create(state,key)
-    },[key, localStorageinstance, state])
+        storageInstance.create(state,key)
+    },[key, storageInstance, state])
 
     return [state, setState] 
 }

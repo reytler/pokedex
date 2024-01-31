@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useDomainPokemon } from "../../domain/pokemon"
 import { IPokemon } from "../../domain/pokemon/pokemon.model"
 import { GridView } from "../components/GridView"
@@ -9,6 +9,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage"
 import { Modal } from "../components/Modal"
 import { IconSearch } from "../components/IconSearch"
 import { SearchPanel } from "../components/SearchPanel"
+import { LocalStorage } from "../../infra/repository/localStorage"
 
 enum View {
     Grid,
@@ -25,16 +26,17 @@ enum Transition {
 }
 
 export function Pokemons(){
+    const storageInstance = useMemo(()=>new LocalStorage(1000),[])
     const {getAll} = useDomainPokemon()
     const [pokemons,setPokemons] = useState<IPokemon[]>()
     const [pokemonsForSearch,setPokemonsForSearch] = useState<IPokemon[]>()
-    const [limit,setLimit] = useLocalStorage<number>("limit",5)
-    const [limitBeforeMonoView,setLimitBeforeMonoView] = useLocalStorage("limitBeforeMonoView",0)
-    const [offset,setOffset] = useLocalStorage<number>("offset",0)
-    const [view,setview] = useLocalStorage<View>("view",View.Grid)
-    const [order,setOrder] = useLocalStorage<Order>("order",Order.Sort)
+    const [limit,setLimit] = useLocalStorage<number>("limit",5,storageInstance)
+    const [limitBeforeMonoView,setLimitBeforeMonoView] = useLocalStorage("limitBeforeMonoView",0,storageInstance)
+    const [offset,setOffset] = useLocalStorage<number>("offset",0,storageInstance)
+    const [view,setview] = useLocalStorage<View>("view",View.Grid,storageInstance)
+    const [order,setOrder] = useLocalStorage<Order>("order",Order.Sort,storageInstance)
     const [count,setCont] = useState<number>(0)
-    const [page,setPage] = useLocalStorage<number>("page",1)
+    const [page,setPage] = useLocalStorage<number>("page",1,storageInstance)
     const [loading,setLoading] = useState<boolean>(false)
     const [modal,setModal] = useState<boolean>(false)
 
