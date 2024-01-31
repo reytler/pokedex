@@ -8,7 +8,7 @@ interface ModalProps {
 
 export function Modal({isOpen,children,toogle}:ModalProps){
     return(
-        <div className="modal" style={{display: isOpen ? 'block': 'none'}}>
+        <div className="modal" style={{display: isOpen ? 'block': 'none'}} data-testid="modal">
             <div className="modal-content">
                 <div className="modal-header">
                     <span className="btn-toogle" onClick={()=>toogle()}>X</span>

@@ -17,7 +17,7 @@ export function HeaderCommandButtons({handleLoadPokemons,handleSetview,loading,p
             <button className="btn-header" onClick={()=>pagination(Transition.Prev)} disabled={loading}>Anterior</button>
             <button className="btn-header" onClick={()=>setOffset(0)} disabled={loading}>Início</button>
             <button className="btn-header" onClick={()=>pagination(Transition.Next)} disabled={loading}>Próximo</button>
-            <select name="" id="" onChange={(event)=>handleSetview(event.target.value)}>
+            <select name="" id="" onChange={(event)=>handleSetview(event.target.value)} data-testid="select-view" value={view}>
                 <option value={View.Grid}>Grid</option>
                 <option value={View.Mono}>Mono</option>
             </select>

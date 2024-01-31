@@ -24,7 +24,7 @@ export function FiltersGridPokemon({handleLoadPokemons,handleSetLimit,handleSeto
         >
             <div className="area-filters-grid">
                 <label htmlFor="limit" className="label-filters-grid">Limite:</label>
-                <select name="limit" id="limit" onChange={(event)=>handleSetLimit(parseInt(event.target.value))} defaultValue={limit} value={limit}>
+                <select name="limit" id="limit" onChange={(event)=>handleSetLimit(parseInt(event.target.value))} value={limit} data-testid="select-limit">
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -33,7 +33,7 @@ export function FiltersGridPokemon({handleLoadPokemons,handleSetLimit,handleSeto
                     <option value="200">200</option>
                 </select>
                 <label htmlFor="order" className="label-filters-grid">Ordem:</label>                
-                <select name="limit" id="limit" onChange={(event)=>handleSetorder(event.target.value)} value={order}>
+                <select name="order" id="order" onChange={(event)=>handleSetorder(event.target.value)} value={order} data-testid="select-order">
                     <option value={Order.Sort}>ASC</option>
                     <option value={Order.Reverse}>DESC</option>
                 </select>
