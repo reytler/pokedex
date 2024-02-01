@@ -11,3 +11,5 @@
 - React
 - Jest
 - React-testing-library
+
+# [Testar Aplicação](https://pokedexreyt.netlify.app/)
